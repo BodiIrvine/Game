@@ -11,6 +11,7 @@ choices = ["rock", "paper", "scissors"]
 # Initialize scores and round count
 Score1 = 0  # Player's score
 Score2 = 0  # AI's score
+Score3 = 0 # Number of draws
 Round_count = 0  # Count of rounds played
 
 # Game loop: keep playing until 'end_game' is chosen
@@ -39,10 +40,13 @@ while True:
     # Check for draw conditions
     if player_choice == "1" and AI_choice == "rock":
         print("This round was a Draw!")
+        Score3 += 1
     elif player_choice == "2" and AI_choice == "paper":
         print("This round was a Draw!")
+        Score3 += 1
     elif player_choice == "3" and AI_choice == "scissors":
         print("This round was a Draw!")
+        Score3 += 1
 
     # Check for player wins
     elif player_choice == "1" and AI_choice == "scissors":
@@ -64,4 +68,4 @@ while True:
     Round_count += 1
 
     # Display current game status
-    print(f"Score: Player 1 = {Score1}, AI = {Score2}, Rounds played = {Round_count}")
+    print(f"Score: Player = {Score1}, AI = {Score2}, Draw = {Score3} Rounds played = {Round_count}")
