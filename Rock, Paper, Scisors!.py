@@ -1,71 +1,78 @@
+import tkinter as tk
 import random
 
-# Display game instructions
-print("This is a rock, paper, scissors game. To play, type 1 for ROCK, 2 for PAPER, or 3 for SCISSORS.")
-print("If you want to see who is winning between the AI and you, type 2.")
-print("To end the game and quit, type 'end_game'. (NOTE: Your progress will not be saved!)")
+# Initialize scores and round count
+player_score = 0
+ai_score = 0
+draws = 0
+rounds = 0
 
-# List of possible choices for the game
+# List of choices
 choices = ["rock", "paper", "scissors"]
 
-# Initialize scores and round count
-Score1 = 0  # Player's score
-Score2 = 0  # AI's score
-Score3 = 0 # Number of draws
-Round_count = 0  # Count of rounds played
 
-# Game loop: keep playing until 'end_game' is chosen
-while True:
-    # Prompt user for input
-    player_choice = input(
-        "What do you want to pick? Type 1 for ROCK, 2 for PAPER, 3 for SCISSORS, or 'end_game' to quit: ")
+# Function to handle player choice
+def play(player_choice):
+    global player_score, ai_score, draws, rounds
 
-    # End game condition if player chooses 'end_game'
-    if player_choice == "end_game":
-        print("Game Over!")
-        break  # Exit the loop and end the game
+    ai_choice = random.choice(choices)
 
-    # Input validation: Ensure player choice is valid
-    if player_choice not in ["1", "2", "3"]:
-        print("Invalid input, please try again.")
-        continue  # Ask for input again if invalid
-
-    # Randomly choose the AI's move
-    AI_choice = random.choice(choices)
-
-    # Display both player and AI choices
-    print(f"AI chose: {AI_choice}")
-    print(f"You chose: {player_choice}")
-
-    # Check for draw conditions
-    if player_choice == "1" and AI_choice == "rock":
-        print("This round was a Draw!")
-        Score3 += 1
-    elif player_choice == "2" and AI_choice == "paper":
-        print("This round was a Draw!")
-        Score3 += 1
-    elif player_choice == "3" and AI_choice == "scissors":
-        print("This round was a Draw!")
-        Score3 += 1
-
-    # Check for player wins
-    elif player_choice == "1" and AI_choice == "scissors":
-        print("Player 1 is the Winner!")
-        Score1 += 1  # Update player score
-    elif player_choice == "2" and AI_choice == "rock":
-        print("Player 1 is the Winner!")
-        Score1 += 1  # Update player score
-    elif player_choice == "3" and AI_choice == "paper":
-        print("Player 1 is the Winner!")
-        Score1 += 1  # Update player score
-
-    # If the player loses
+    # Determine the result
+    if player_choice == ai_choice:
+        result = "It's a Draw!"
+        draws += 1
+    elif (player_choice == "rock" and ai_choice == "scissors") or \
+            (player_choice == "paper" and ai_choice == "rock") or \
+            (player_choice == "scissors" and ai_choice == "paper"):
+        result = "You Win!"
+        player_score += 1
     else:
-        print("Player 1 is the Loser")
-        Score2 += 1  # Update AI score
+        result = "AI Wins!"
+        ai_score += 1
 
-    # Increment round count after each round
-    Round_count += 1
+    rounds += 1
 
-    # Display current game status
-    print(f"Score: Player = {Score1}, AI = {Score2}, Draw = {Score3} Rounds played = {Round_count}")
+    # Update labels
+    ai_choice_label.config(text=f"AI Chose: {ai_choice}")
+    result_label.config(text=result)
+    score_label.config(text=f"Player: {player_score} | AI: {ai_score} | Draws: {draws} | Rounds: {rounds}")
+
+
+# Function to end the game
+def end_game():
+    root.quit()  # Closes the Tkinter window
+
+
+# Create main window
+root = tk.Tk()
+root.title("Rock Paper Scissors")
+
+# Create labels
+title_label = tk.Label(root, text="Rock, Paper, Scissors Game", font=("Arial", 14))
+title_label.pack()
+
+ai_choice_label = tk.Label(root, text="AI Chose: ", font=("Arial", 12))
+ai_choice_label.pack()
+
+result_label = tk.Label(root, text="Make Your Move!", font=("Arial", 12))
+result_label.pack()
+
+score_label = tk.Label(root, text="Player: 0 | AI: 0 | Draws: 0 | Rounds: 0", font=("Arial", 12))
+score_label.pack()
+
+# Create buttons for game choices
+btn_rock = tk.Button(root, text="Rock", font=("Arial", 12), command=lambda: play("rock"))
+btn_rock.pack()
+
+btn_paper = tk.Button(root, text="Paper", font=("Arial", 12), command=lambda: play("paper"))
+btn_paper.pack()
+
+btn_scissors = tk.Button(root, text="Scissors", font=("Arial", 12), command=lambda: play("scissors"))
+btn_scissors.pack()
+
+# Create Quit Game button
+btn_quit = tk.Button(root, text="Quit Game", font=("Arial", 12), fg="white", bg="red", command=end_game)
+btn_quit.pack()
+
+# Run the application
+root.mainloop()
